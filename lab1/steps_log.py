@@ -10,7 +10,7 @@ def baby_step_giant_step(a, y, p):
     k = isqrt(p) + 1
 
     # Первый ряд: Шаги младенца (baby steps)
-    baby_steps = {pow(a, j, p): j for j in range(m)}
+    baby_steps = {pow_mod(a, j, p): j for j in range(m)}
 
     # Второй ряд: Шаги великана (giant steps)
     # Находим a^(-m) mod p - обратный элемент по модулю
