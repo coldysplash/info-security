@@ -11,10 +11,10 @@ def shamir_protocol():
         m = int(file.readline())
     p = generate_prime_number(20, 100)
 
-    # секретные числа для абонента А
+    # секретные числа абонента А
     c1, d1 = generate_shamir_generate(p)
 
-    # секретные числа для абонента А
+    # секретные числа абонента B
     c2, d2 = generate_shamir_generate(p)
 
     # m < p
