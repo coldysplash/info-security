@@ -2,11 +2,11 @@ import random
 
 
 def vernam_encode():
-    with open(f"data/vernam.txt", "r") as file:
+    with open(f"encryption_lib/data/vernam.txt", "r") as file:
         messg = file.read()
 
     keys = []
-    with open(f"data/vernam.encode.txt", "w") as file:
+    with open(f"encryption_lib/data/vernam.encode.txt", "w") as file:
         for m in messg:
             k = random.randint(1, 300)
             e = ord(m) ^ k
@@ -18,7 +18,7 @@ def vernam_encode():
 
 def vernam_decode(keys: list):
 
-    with open(f"data/vernam.encode.txt", "r") as file:
+    with open(f"encryption_lib/data/vernam.encode.txt", "r") as file:
         messg = file.read()
 
     messge_encode = ""

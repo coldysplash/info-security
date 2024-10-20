@@ -1,10 +1,10 @@
 import random
-from extralib import generate_prime_number, gcd
+from extra_lib.extralib import generate_prime_number, gcd
 
 
 def rsa_generate():
-    P = generate_prime_number(1, 100)
-    Q = generate_prime_number(1, 100)
+    P = generate_prime_number(1, 1000)
+    Q = generate_prime_number(1, 1000)
     N = P * Q
 
     f = (P - 1) * (Q - 1)
@@ -13,14 +13,14 @@ def rsa_generate():
         d += 1
     c = pow(d, -1, f)
 
-    return [c, d, N]
+    return c, d, N
 
 
 def rsa_encode(d, N):
-    with open(f"data/rsa.txt", "r") as file:
+    with open(f"encryption_lib/data/rsa.txt", "r") as file:
         messg = file.read()
 
-    with open(f"data/rsa.encode.txt", "w") as file:
+    with open(f"encryption_lib/data/rsa.encode.txt", "w") as file:
         for m in messg:
             e = pow(ord(m), d, N)
 
@@ -28,7 +28,7 @@ def rsa_encode(d, N):
 
 
 def rsa_decode(c, N):
-    with open("data/rsa.encode.txt", "r") as file:
+    with open("encryption_lib/data/rsa.encode.txt", "r") as file:
         messg = file.read()
 
     message_decode = ""
@@ -40,8 +40,8 @@ def rsa_decode(c, N):
 
 
 def main():
-    A = rsa_generate()
-    B = rsa_generate()
+    A = list(rsa_generate())
+    B = list(rsa_generate())
 
     rsa_encode(d=B[1], N=B[2])
     decode_mesg = rsa_decode(c=B[0], N=B[2])

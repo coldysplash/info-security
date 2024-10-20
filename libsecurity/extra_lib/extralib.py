@@ -24,14 +24,14 @@ def gcd(a, b):
 
 
 # ax + by = gcd(a, b)
-def gcd_xy(a: int, b: int) -> list:
+def gcd_xy(a, b) -> list:
     T = [0, 0, 0]
     if a >= b:
-        U = [a, 1, 0]
-        V = [b, 0, 1]
+        U = [max(a, b), 1, 0]
+        V = [min(a, b), 0, 1]
     else:
-        U = [a, 0, 1]
-        V = [b, 1, 0]
+        U = [max(a, b), 0, 1]
+        V = [min(a, b), 1, 0]
 
     while T[0] != 1:
         q = U[0] // V[0]

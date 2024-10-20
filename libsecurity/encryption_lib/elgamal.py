@@ -1,6 +1,6 @@
 # Позволяет передавать сообщения не имея защищенного канала используя одну пересылку
 
-from extralib import generate_prime_number, primitive_root
+from extra_lib.extralib import generate_prime_number, primitive_root
 
 
 def elgamal_generate(p, g):
@@ -9,14 +9,14 @@ def elgamal_generate(p, g):
     # открытое число
     d = pow(g, c, p)
 
-    return [c, d]
+    return c, d
 
 
 def elgamal_encode(p, g, d):
-    with open(f"data/elgamal.txt", "r") as file:
+    with open(f"encryption_lib/data/elgamal.txt", "r") as file:
         messg = file.read()
 
-    with open(f"data/elgamal.encode.txt", "w") as file:
+    with open(f"encryption_lib/data/elgamal.encode.txt", "w") as file:
         for ch in messg:
             k = generate_prime_number(1, p - 2)
             r = pow(g, k, p)
@@ -27,7 +27,7 @@ def elgamal_encode(p, g, d):
 
 
 def elgamal_decode(p, c):
-    with open("data/elgamal.encode.txt", "r") as file:
+    with open("encryption_lib/data/elgamal.encode.txt", "r") as file:
         messg = file.read()
 
     message_decode = ""
@@ -46,8 +46,8 @@ def main():
     p = generate_prime_number(1000, 5000)
     g = primitive_root(p)
     # генерируем параметры для абонентов
-    A = elgamal_generate(p, g)
-    B = elgamal_generate(p, g)
+    A = list(elgamal_generate(p, g))
+    B = list(elgamal_generate(p, g))
     # Абонент А шифрует, Абонент B расшифровывает
     # (B[1] - открытый ключ d_b, B[0] - закрытый ключ c_a)
 

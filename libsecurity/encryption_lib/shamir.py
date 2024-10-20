@@ -3,11 +3,11 @@
 # В основном используется для шифрования числовых ключей.
 
 import random
-from extralib import generate_prime_number, gcd, pow_mod
+from extra_lib.extralib import generate_prime_number, gcd, pow_mod
 
 
 def shamir_protocol():
-    with open(f"data/shamir.txt", "r") as file:
+    with open(f"encryption_lib/data/shamir.txt", "r") as file:
         m = int(file.readline())
     p = generate_prime_number(20, 100)
 
