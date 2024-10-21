@@ -1,4 +1,4 @@
-from extra_lib.extralib import gcd_xy, generate_prime_number, is_prime
+from extra_lib.extralib import generate_prime_number, is_prime
 import hashlib
 import pickle
 import random
@@ -70,13 +70,8 @@ def gost_sign_check(input_file, sign_file, y, p, q, a):
 
     for i in range(0, 16):
         if r[i] >= q or s[i] >= q:
-            print("fail")
             return -1
-        T = gcd_xy(h[i], q)  # fail
-        if T[1] < 0:
-            h_inv = q + T[1]
-        else:
-            h_inv = T[1]
+        h_inv = pow(h[i], -1, q)
         u1 = (s[i] * h_inv) % q
         u2 = (-r[i] * h_inv) % q
         if u2 < 0:
@@ -92,11 +87,18 @@ def main():
 
     input_file = "dsign_lib/data/image.jpg"
 
+    # генерируем публичные параметры
     p, q, a = gen_public_parametrs()
+
     # подписываем файл
     y = gost_sign(input_file, p, q, a)
+
     # проверяем файл на подлинность
-    print(gost_sign_check(input_file, f"{input_file}.gost_s", y, p, q, a))
+    gost_sign_res = gost_sign_check(input_file, f"{input_file}.gost_s", y, p, q, a)
+    if gost_sign_res == 0:
+        print("Подпись подлинная!")
+    else:
+        print("Подпись не является подлинной!")
 
 
 if __name__ == "__main__":

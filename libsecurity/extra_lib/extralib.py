@@ -33,7 +33,7 @@ def gcd_xy(a, b) -> list:
         U = [max(a, b), 0, 1]
         V = [min(a, b), 1, 0]
 
-    while T[0] != 1:
+    while V[0] != 0:
         q = U[0] // V[0]
         T[0] = U[0] % V[0]
         T[1] = U[1] - q * V[1]
