@@ -2,7 +2,7 @@ from modules.poker import mental_poker
 
 
 def main():
-    Players = ["Alice", "Bob", "Eva", "Ilya"]
+    Players = ["Alice", "Bob", "Eva"]
     mental_poker(Players_Names=Players)
 
 

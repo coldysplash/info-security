@@ -8,8 +8,6 @@ class Player:
 
     def __init__(self, name, p_key):
         self.name = name
-        self.u = []
-        self.v = []
         self.hand = []
         self.P = p_key
         self.key_c = random.randint(1, self.P - 1)
@@ -38,35 +36,64 @@ def generate_deck(input_deck_file, p):
     return rand_keys, encode_deck, q_cards
 
 
+def print_hand(cards):
+    print(*cards[0], *cards[1])
+
+
+def print_board(cards):
+    print(f"\nCards on the board:")
+    for card in cards:
+        print(*card)
+
+
 def mental_poker(Players_Names: list):
     if len(Players_Names) < 2:
         print("Error! Minimum number of players two.")
         return -1
 
-    p = generate_prime_number(100, 10000)
+    p = generate_prime_number(1000, 10000)
     Players = [Player(name=name, p_key=p) for name in Players_Names]
 
     deck_config = "/home/coldysplash/programming/info-security/M_Poker/modules/deck.txt"
     deck_keys, deck, q_cards = generate_deck(deck_config, p)
 
+    # шифруем и перемешиваем колоду
+    encode_deck = deck_keys
     for player in Players:
-        player.u = [pow(card, player.key_c, p) for card in deck_keys]
-        random.shuffle(player.u)
-        for j in range(0, 2):
+        encode_deck = [pow(card, player.key_c, p) for card in encode_deck]
+        random.shuffle(encode_deck)
+
+    # расшифровываем и узнаем карты каждого игрока
+    for player in Players:
+        for j in range(2):
             rand_card = random.randint(0, q_cards - 1)
             for player2 in Players:
-                if player == player2:
-                    card_key = pow(player.u[rand_card], player.key_d, p)
-                else:
-                    player2.v = [pow(card, player2.key_c) for card in player.u]
-                    w = pow(player2.v[rand_card], player.key_d, p)
-                    card_key = pow(w, player2.key_d, p)
+                if player != player2:
+                    encode_deck[rand_card] = pow(
+                        encode_deck[rand_card], player2.key_d, p
+                    )
+            encode_deck[rand_card] = pow(encode_deck[rand_card], player.key_d, p)
 
-                if card_key in deck_keys:
-                    player.hand.append(deck[card_key])
-                    q_cards -= 1
-                    deck_keys.remove(card_key)
-                    deck.pop(card_key)
+            if encode_deck[rand_card] in deck_keys:
+                player.hand.append(deck[encode_deck[rand_card]])
+                q_cards -= 1
+                deck.pop(encode_deck[rand_card])
+                encode_deck.pop(rand_card)
+
+    # выкладываем 5 карт на игровой стол
+    game_board = []
+    for i in range(5):
+        rand_card = random.randint(0, q_cards - 1)
+        for player in Players:
+            encode_deck[rand_card] = pow(encode_deck[rand_card], player.key_d, p)
+            if encode_deck[rand_card] in deck_keys:
+                game_board.append(deck[encode_deck[rand_card]])
+                q_cards -= 1
+                deck.pop(encode_deck[rand_card])
+                encode_deck.pop(rand_card)
 
     for pl in Players:
-        print(f"{pl.name}, {pl.hand}\n")
+        print(f'Player "{pl.name}" - ', end="")
+        print_hand(pl.hand)
+
+    print_board(game_board)
